@@ -53,7 +53,7 @@ jobs:
         path: dist
 
 
-release:
+  release:
     name: Release
     runs-on: ubuntu-latest
     # Only run if the previous 3 jobs succeeded
