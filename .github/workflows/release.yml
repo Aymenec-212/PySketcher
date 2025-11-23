@@ -1,75 +1,76 @@
 name: Release
 
 on:
-  # Trigger 1: When you create a Release on GitHub
   release:
     types: [created]
-  # Trigger 2: A button to run this manually (Great for testing!)
   workflow_dispatch:
 
+permissions:
+  contents: read
 
 jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: messense/maturin-action@v1
-      with:
-        manylinux: auto
-        command: build
-        args: --release --out dist
-    - name: Upload wheels
-      uses: actions/upload-artifact@v3
-      with:
-        name: wheels
-        path: dist
+      - uses: actions/checkout@v4
+      - uses: messense/maturin-action@v1
+        with:
+          manylinux: auto
+          command: build
+          args: --release --out dist
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-linux
+          path: dist
 
   windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: messense/maturin-action@v1
-      with:
-        command: build
-        args: --release --out dist
-    - name: Upload wheels
-      uses: actions/upload-artifact@v3
-      with:
-        name: wheels
-        path: dist
+      - uses: actions/checkout@v4
+      - uses: messense/maturin-action@v1
+        with:
+          command: build
+          args: --release --out dist
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-windows
+          path: dist
 
   macos:
     runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: messense/maturin-action@v1
-      with:
-        command: build
-        args: --release --out dist
-    - name: Upload wheels
-      uses: actions/upload-artifact@v3
-      with:
-        name: wheels
-        path: dist
-
+      - uses: actions/checkout@v4
+      - uses: messense/maturin-action@v1
+        with:
+          command: build
+          args: --release --out dist
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheels-macos
+          path: dist
 
   release:
     name: Release
     runs-on: ubuntu-latest
-    # Only run if the previous 3 jobs succeeded
+    if: "startsWith(github.ref, 'refs/tags/')"
     needs: [linux, windows, macos]
+    environment: pypi
     permissions:
-      # This gives the robot permission to talk to PyPI securely
       id-token: write
-      contents: read
     steps:
-    - uses: actions/download-artifact@v3
-      with:
-        name: wheels
-    - name: Publish to PyPI
-      uses: PyO3/maturin-action@v1
-      env:
-        MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-      with:
-        command: upload
-        args: --non-interactive --skip-existing *
+      - uses: actions/download-artifact@v4
+        with:
+          # v4 way to download all artifacts and merge them
+          pattern: wheels-*
+          merge-multiple: true
+          path: dist
+      - name: Publish to PyPI
+        uses: PyO3/maturin-action@v1
+        env:
+          MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+        with:
+          command: upload
+          args: --non-interactive --skip-existing *
