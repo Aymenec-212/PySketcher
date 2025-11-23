@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+build/
+*.egg-info/
+.env
+
+# Rust
+target/
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+
+# SketchForge specific
+.sketchforge/
+sketch.txt
+*.bak

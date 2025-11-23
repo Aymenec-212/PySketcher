@@ -1,0 +1,44 @@
+# PYTHON: Configuration (dependencies, build system)
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "sketchforge"
+version = "0.1.0"
+description = "Bidirectional Project Intelligence"
+readme = "README.md"
+authors = [
+  { name = "Aymen Echchalim", email = "aymen.echchalim@gmail.com" },
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "typer>=0.9.0",          # For the CLI
+    "jinja2>=3.1.0",         # For templating
+    "rich>=13.0.0",          # For pretty terminal output
+    "textual>=0.40.0",       # For the TUI
+    "watchdog>=3.0.0",       # For file watching (Python side fallback)
+]
+
+# This maps the Rust compiled module to the Python package
+[project.scripts]
+[tool.maturin]
+features = ["pyo3/extension-module"]
+# 1. Tell Maturin where the python source root is.
+# Since 'sketchforge' folder is in the root, we use "."
+python-source = "."
+
+# 2. Tell Maturin explicitly which module connects to Rust
+module-name = "sketchforge._sketchforge_core"
+# Note: This assumes your __init__.py imports the rust module.
+
+sketchforge = "sketchforge.cli:app"

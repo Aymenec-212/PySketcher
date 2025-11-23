@@ -1,0 +1,15 @@
+from sqlalchemy import Column, Integer, String, Boolean, Float
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+class {{ class_name }}(Base):
+    __tablename__ = "{{ class_name | lower }}s"
+
+    id = Column(Integer, primary_key=True, index=True)
+    {% for field in fields %}
+    {{ field.name }} = Column({{ field.type }}, nullable=True)
+    {% endfor %}
+
+    def __repr__(self):
+        return f"<{{ class_name }} id={self.id}>"

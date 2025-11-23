@@ -1,0 +1,15 @@
+# RUST: Configuration (dependencies, lib type)
+[package]
+name = "sketchforge_core" # Internal name for the Rust binary
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "_sketchforge_core" # Add an underscore to indicate it's private
+crate-type = ["cdylib"]   # Important: Creates a C-compatible dynamic library
+
+[dependencies]
+pyo3 = { version = "0.20.0", features = ["extension-module"] }
+walkdir = "2.4"           # For fast directory scanning
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

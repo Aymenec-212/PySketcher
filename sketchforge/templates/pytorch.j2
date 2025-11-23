@@ -1,0 +1,27 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class {{ class_name }}(nn.Module):
+    def __init__(self):
+        super({{ class_name }}, self).__init__()
+        {% for layer in fields %}
+        {% if layer.type == 'linear' %}
+        self.{{ layer.name }} = nn.Linear(128, 64) # Placeholder dims
+        {% elif layer.type == 'conv2d' %}
+        self.{{ layer.name }} = nn.Conv2d(1, 32, 3, 1)
+        {% elif layer.type == 'dropout' %}
+        self.{{ layer.name }} = nn.Dropout(0.5)
+        {% else %}
+        self.{{ layer.name }} = nn.{{ layer.type | capitalize }}()
+        {% endif %}
+        {% endfor %}
+
+    def forward(self, x):
+        {% for layer in fields %}
+        x = self.{{ layer.name }}(x)
+        {% if layer.type in ['linear', 'conv2d'] %}
+        x = F.relu(x)
+        {% endif %}
+        {% endfor %}
+        return x
