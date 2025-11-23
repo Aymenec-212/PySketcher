@@ -28,6 +28,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: messense/maturin-action@v1
         with:
           command: build
@@ -42,6 +45,9 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: messense/maturin-action@v1
         with:
           command: build
@@ -63,7 +69,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          # v4 way to download all artifacts and merge them
           pattern: wheels-*
           merge-multiple: true
           path: dist
