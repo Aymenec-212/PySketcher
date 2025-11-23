@@ -3,7 +3,7 @@
 # ⚡ SketchForge
 
 [![PyPI](https://img.shields.io/pypi/v/sketchforge)](https://pypi.org/project/sketchforge/)
-[![Build Status](https://github.com/Aymenec-212/PySketcher/actions/workflows/release.yml/badge.svg)](https://github.com/Aymenec-212/Pysketcher/actions)
+[![Build Status](https://github.com/Aymenec-212/sketchforge/actions/workflows/release.yml/badge.svg)](https://github.com/Aymenec-212/sketchforge/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **Infrastructure-as-Code for your Application Logic.**
